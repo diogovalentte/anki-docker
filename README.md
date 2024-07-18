@@ -17,6 +17,7 @@ The image accepts the following environment variables:
 
 - `ANKI_USERNAME`, `ANKI_PASSWORD` (not optional): The Anki sync server user. More about it [here](https://docs.ankiweb.net/sync-server.html#multiple-users).
   - The `ANKI_PASSWORD` should be the hashed password, more about it [here](https://docs.ankiweb.net/sync-server.html#hashed-passwords).
+  - Create the environment variable enclosed in single quotes, like this: `ANKI_PASSWORD='your_hashed_password'`.
 - `NTFY_ADDRESS`, `NTFY_TOPIC`, `NTFY_TOKEN` (optional): Ntfy configs to send notifications to a Ntfy topic when the server is updated or an error occurs.
 - `GITHUB_TOKEN` (optional): A GitHub token to increase the rate limit of the GitHub API. More about it [here](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28).
 
