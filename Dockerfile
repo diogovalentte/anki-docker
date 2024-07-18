@@ -17,6 +17,7 @@ ENV TZ=UTC \
     NTFY_ADDRESS=\
     NTFY_TOPIC=\
     NTFY_TOKEN=\
+    GITHUB_TOKEN=\
     PATH="/root/.cargo/bin:${PATH}" \
     CONFIG_FOLDER=/data/config \
     ANKI_STORAGE_FOLDER=/data/anki

@@ -23,8 +23,12 @@ def create_default_folders():
 
 
 def get_github_tags():
+    github_token = os.getenv("GITHUB_TOKEN", "")
+    headers = {}
+    if github_token:
+        headers = {"Authorization": f"Bearer {github_token}"}
     url = "https://api.github.com/repos/ankitects/anki/tags"
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
 
     tags = response.json()
@@ -120,7 +124,7 @@ def start_anki_server():
     command = f"PASSWORDS_HASHED=1 SYNC_BASE={anki_storage_folder_path} SYNC_USER1='{username}:{password}' {bin_path}"
     status_code = os.system(command)
     if status_code != 0:
-        raise Exception("Error while starting anki-sync-server")
+        raise Exception("Error while starting/executing the anki-sync-server")
     else:
         logger.info("Anki sync server started and ended successfully")
 
