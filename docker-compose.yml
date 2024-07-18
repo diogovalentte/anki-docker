@@ -3,9 +3,7 @@ version: "3"
 services:
   anki:
     container_name: anki
-    build:
-      context: https://github.com/diogovalentte/anki-docker.git
-      dockerfile: Dockerfile
+    image: ghcr.io/diogovalentte/anki-docker:latest
     environment:
       - ANKI_USERNAME=
       - ANKI_PASSWORD=
