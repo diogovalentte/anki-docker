@@ -1,0 +1,7 @@
+certifi==2024.7.4
+charset-normalizer==3.3.2
+idna==3.7
+psutil==6.0.0
+pytfy @ git+https://github.com/diogovalentte/pytfy.git@a26fe2862dbad554ac4d673a105e72d5febf3041
+requests==2.31.0
+urllib3==2.2.2
