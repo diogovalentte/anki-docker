@@ -117,7 +117,7 @@ def start_anki_server():
     anki_storage_folder_path = ANKI_STORAGE_FOLDER
 
     bin_path = os.path.join(CONFIG_FOLDER, "sync_server/bin/anki-sync-server")
-    command = f"PASSWORDS_HASHED=1 SYNC_BASE={anki_storage_folder_path} SYNC_USER1={username}:{password} {bin_path}"
+    command = f"PASSWORDS_HASHED=1 SYNC_BASE={anki_storage_folder_path} SYNC_USER1='{username}:{password}' {bin_path}"
     status_code = os.system(command)
     if status_code != 0:
         raise Exception("Error while starting anki-sync-server")
