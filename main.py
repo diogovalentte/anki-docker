@@ -163,13 +163,4 @@ if __name__ == "__main__":
     if ntfy_address and ntfy_topic and ntfy_token:
         ntfy = NtfyPublisher(ntfy_address, ntfy_topic, ntfy_token)
 
-    try:
-        main()
-    except Exception as e:
-        logger.error(f"Error: {e}")
-        try:
-            if ntfy:
-                ntfy.post(title="Anki Sync Server Error!", message=f"Error: {e}")
-        except Exception as e2:
-            logger.error(f"Error while sending notification: {e2}")
-        raise e
+    main()

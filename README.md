@@ -9,8 +9,6 @@ This project contains a Docker image that at start/restart will:
 
 The image is made this way so you can create a cronjob that will restart the container daily so it can check for updates and always keep the Anki sync server updated.
 
-- As the container will make a request to GitHub, it's recommended to not let the container keep restarting if it fails at any moment. Set the container restart policy to "no".
-
 # How to run
 
 The image accepts the following environment variables:
@@ -18,7 +16,7 @@ The image accepts the following environment variables:
 - `ANKI_USERNAME`, `ANKI_PASSWORD` (not optional): The Anki sync server user. More about it [here](https://docs.ankiweb.net/sync-server.html#multiple-users).
   - The `ANKI_PASSWORD` should be the hashed password, more about it [here](https://docs.ankiweb.net/sync-server.html#hashed-passwords).
   - Create the environment variable enclosed in single quotes, like this: `ANKI_PASSWORD='your_hashed_password'`.
-- `NTFY_ADDRESS`, `NTFY_TOPIC`, `NTFY_TOKEN` (optional): Ntfy configs to send notifications to a Ntfy topic when the server is updated or an error occurs.
+- `NTFY_ADDRESS`, `NTFY_TOPIC`, `NTFY_TOKEN` (optional): Ntfy configs to send notifications to a Ntfy topic when the server is updated.
 - `GITHUB_TOKEN` (optional): A GitHub token to increase the rate limit of the GitHub API. More about it [here](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28).
 
 The image stores important things in the folder `/data` that must be preserved between runs, so you **should** mount it.
