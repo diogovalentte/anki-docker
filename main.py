@@ -102,6 +102,17 @@ def save_tag(version):
         file.write(version)
 
 
+def update_rust():
+    try:
+        status_code = os.system("rustup update stable")
+    except Exception as e:
+        logger.error(f"Error while updating rust: {e}")
+        raise e
+    else:
+        if status_code != 0:
+            raise Exception("Error while updating rust")
+
+
 def install_anki_server_bin(tag):
     bin_root_folder = os.path.join(CONFIG_FOLDER, "sync_server")
     script_path = os.path.join(
@@ -138,6 +149,8 @@ def main():
     current_tag = get_current_tag()
     if is_tag_greater_than(last_tag, current_tag):
         logger.info(f"New version found: {last_tag}")
+        logger.info("Updating rust...")
+        update_rust()
         logger.info("Installing anki-sync-server...")
         install_anki_server_bin(last_tag)
         logger.info("Saving the new tag info...")
