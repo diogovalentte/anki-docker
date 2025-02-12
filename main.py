@@ -102,15 +102,39 @@ def save_tag(version):
         file.write(version)
 
 
-def update_rust():
+def reinstall_toolchain():
     try:
-        status_code = os.system("rustup update stable")
+        status_code = os.system(
+            "rustup toolchain uninstall stable && rustup toolchain install stabl"
+        )
     except Exception as e:
-        logger.error(f"Error while updating rust: {e}")
+        logger.error(f"Error while reinstalling toolchain: {e}")
         raise e
     else:
         if status_code != 0:
-            raise Exception("Error while updating rust")
+            raise Exception("Command to reinstall toolchain failed")
+
+
+def update_rust():
+    try_again = True
+    toolchain_reinstalled = False
+    while try_again:
+        try:
+            status_code = os.system("rustup update stable")
+        except Exception as e:
+            logger.error(f"Error while updating rust: {e}")
+            raise e
+        else:
+            if status_code != 0:
+                if toolchain_reinstalled:
+                    raise Exception("Command to update rust failed")
+                logger.error(
+                    "Command to update rust failed. Will try to reinstall the toolchain and try again"
+                )
+                reinstall_toolchain()
+                toolchain_reinstalled = True
+            else:
+                try_again = False
 
 
 def install_anki_server_bin(tag):
