@@ -5,12 +5,9 @@ services:
     container_name: anki
     image: ghcr.io/diogovalentte/anki-docker:latest
     environment:
-      - ANKI_USERNAME=
-      - ANKI_PASSWORD=
-      - NTFY_ADDRESS=
-      - NTFY_TOPIC=
-      - NTFY_TOKEN=
-      - GITHUB_TOKEN=
+      - SYNC_USER1='username1:hashed_password'
+      - SYNC_USER2='username2:hashed_password'
+      - SYNC_USER3='username3:hashed_password'
     ports:
       - 8080:8080
     restart: always

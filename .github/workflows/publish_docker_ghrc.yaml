@@ -1,9 +1,11 @@
 name: Create and publish a container image
 
 on:
-  push:
-    tags:
-      - "*"
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: "Tag for the Docker image (e.g., '1.0.0', '27.0')"
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -42,16 +44,9 @@ jobs:
           push: true
           provenance: false
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Set up Tailscale
-        uses: tailscale/github-action@v2
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
-
-      - name: Update my portainer stack xD
-        run: |
-          python3 .github/workflows/update_portainer_stack.py ${{ secrets.PORTAINER_URL }} ${{ secrets.PORTAINER_USERNAME }} ${{ secrets.PORTAINER_PASSWORD }} ${{ secrets.PORTAINER_STACK_NAME }} ${{ secrets.GH_USERNAME }} ${{ secrets.GH_TOKEN }}
+          build-args: |
+            TAG=${{ github.event.inputs.version_tag }}
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.event.inputs.version_tag }}

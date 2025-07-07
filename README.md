@@ -1,29 +1,15 @@
 # Anki Docker
 
-This project is made to run the latest versions of the [Anki](https://github.com/ankitects/anki) sync server.
-This project contains a Docker image that at start/restart will:
+1. Create a folder for the anki to store its data. It should be owned by user `65532` (_the user inside the container_). You can use the following command to create the folder and set the permissions (_change the `./data` path to your desired location_):
 
-1. Look at the [Anki GitHub repo](https://github.com/ankitects/anki/releases) releases and check if the current server is the latest version.
-2. If no, it'll install and run the latest release, and possibly notify a [Ntfy](https://github.com/binwiederhier/ntfy) topic.
-3. If yes, it'll run the currently installed version.
+```bash
+mkdir -p ./data && sudo chown 65532:65532 ./data
+```
 
-The image is made this way so you can create a cronjob that will restart the container daily so it can check for updates and always keep the Anki sync server updated.
+3. Use the `docker-compose.yml` file in this repository to run the Anki sync server.
 
-# How to run
+4. Add the Anki [usernames and hashed passwords](https://docs.ankiweb.net/sync-server.html#multiple-users) to the environment variables in the `docker-compose.yml` file or when running the container.
 
-The image accepts the following environment variables:
-
-- `ANKI_USERNAME`, `ANKI_PASSWORD` (not optional): The Anki sync server user. More about it [here](https://docs.ankiweb.net/sync-server.html#multiple-users).
-  - The `ANKI_PASSWORD` should be the hashed password, more about it [here](https://docs.ankiweb.net/sync-server.html#hashed-passwords).
-  - Create the environment variable enclosed in single quotes, like this: `ANKI_PASSWORD='your_hashed_password'`.
-- `NTFY_ADDRESS`, `NTFY_TOPIC`, `NTFY_TOKEN` (optional): Ntfy configs to send notifications to a Ntfy topic when the server is updated.
-- `GITHUB_TOKEN` (optional): A GitHub token to increase the rate limit of the GitHub API. More about it [here](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28).
-
-The image stores important things in the folder `/data` that must be preserved between runs, so you **should** mount it.
-
-- In `/data/config` is the current installed Anki sync server binary version/tag and the binary itself.
-- In `/data/anki` is the Anki sync server data, more about it [here](https://docs.ankiweb.net/sync-server.html#storage-location).
-
-The Anki sync server will run on the port `8080`.
-
-This repository also has a `docker-compose.yml` example file.
+- At least one user is required.
+- The `ANKI_PASSWORD` should be the hashed password, more about it [here](https://docs.ankiweb.net/sync-server.html#hashed-passwords).
+- Create the environment variables enclosed in single quotes, like this: `SYNC_USER3='username3:hashed_password'`.
