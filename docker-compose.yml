@@ -1,15 +1,23 @@
-version: "3"
-
 services:
-  anki:
-    container_name: anki
-    image: ghcr.io/diogovalentte/anki-docker:latest
+  anki-sync-server:
+    container_name: anki-sync-server
+    image: ghcr.io/diogovalentte/anki-sync-server:latest
     environment:
       - SYNC_USER1='username1:hashed_password'
       - SYNC_USER2='username2:hashed_password'
       - SYNC_USER3='username3:hashed_password'
     ports:
       - 8080:8080
-    restart: always
+    restart: unless-stopped
     volumes:
-      - ./data:/data
+      - ./sync_server_data:/data
+
+  anki-desktop:
+    container_name: anki-desktop
+    image: ghcr.io/diogovalentte/anki-desktop:latest
+    ports:
+      - 3000:3000 # Web UI
+      - 8765:8765 # AnkiConnect
+    volumes:
+      - ./desktop_data:/config/app/Anki2
+    restart: unless-stopped

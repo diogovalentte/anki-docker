@@ -1,0 +1,4 @@
+sudo chown -R abc:abc /config &&
+export DISABLE_QT5_COMPAT=1 &&
+export LC_ALL=en_US.UTF-8 &&
+anki

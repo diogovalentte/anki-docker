@@ -1,4 +1,4 @@
-name: Create and publish a container image
+name: Create and publish the anki sync server and desktop images
 
 on:
   workflow_dispatch:
@@ -9,7 +9,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-publish:
@@ -19,6 +18,11 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+
+      - name: Set image names
+        run: |
+          echo "SYNC_SERVER_IMAGE_NAME=${REGISTRY}/${{ github.repository_owner }}/anki-sync-server" >> $GITHUB_ENV
+          echo "DESKTOP_IMAGE_NAME=${REGISTRY}/${{ github.repository_owner }}/anki-desktop" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -33,36 +37,44 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
+      - name: Extract metadata (tags, labels) for anki sync server
+        id: sync-server-meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.SYNC_SERVER_IMAGE_NAME }}
 
-      - name: Build and push Docker image
+      - name: Extract metadata (tags, labels) for anki desktop
+        id: desktop-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DESKTOP_IMAGE_NAME }}
+
+      - name: Build and push anki sync server image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: sync_server
+          file: sync_server/Dockerfile
           push: true
           provenance: false
           platforms: linux/amd64
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.sync-server-meta.outputs.labels }}
           build-args: |
             TAG=${{ github.event.inputs.version_tag }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
+            ${{ env.SYNC_SERVER_IMAGE_NAME }}:latest
+            ${{ env.SYNC_SERVER_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
 
-      - name: Create tag using GitHub API
-        uses: actions/github-script@v7
+      - name: Build and push anki desktop image
+        uses: docker/build-push-action@v3
         with:
-          script: |
-            const tag = '${{ github.event.inputs.version_tag }}';
-            const sha = context.sha;
-
-            await github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${tag}`,
-              sha: sha
-            });
+          context: desktop
+          file: desktop/Dockerfile
+          push: true
+          provenance: false
+          platforms: linux/amd64
+          labels: ${{ steps.desktop-meta.outputs.labels }}
+          build-args: |
+            TAG=${{ github.event.inputs.version_tag }}
+          tags: |
+            ${{ env.DESKTOP_IMAGE_NAME }}:latest
+            ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
