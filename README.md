@@ -18,6 +18,8 @@ mkdir -p ./sync_server_data && sudo chown 65532:65532 ./headless_data
 
 # Anki Headless
 
+This image is based on [this repository](https://github.com/ThisIsntTheWay/headless-anki).
+
 1. Create a folder for anki to store its data. It should be owned by user `1000` (_the user inside the container_). You can use the following command to create the folder and set the permissions (_change the `./data` path to your desired location_):
 
 ```bash
@@ -30,3 +32,11 @@ mkdir -p ./headless_data && sudo chown 1000:1000 ./headless_data
 > If you do bring your own profile, make sure you don't have the AnkiConnect plugin installed, as it will conflict with the in `/data/addons21/AnkiConnectDev` that will be installed inside the container every time it restarts!
 >
 > - The default AnkiConnect plugin folder is `2055492159` inside the `plugins21` folder, so if you have it installed, just delete that folder.
+
+You can also use other QT platform plugins by setting the env var `QT_QPA_PLATFORM` to the desired value. For example, to use the offscreen platform plugin, you can run the container with:
+
+```bash
+docker run -e QT_QPA_PLATFORM="offscreen" ...
+```
+
+By default, Anki will be launched using `QT_QPA_PLATFORM="vnc"`. This will enable Anki to be accessed using a VNC viewer which might help with debugging, provided port `5900` is forwarded.
