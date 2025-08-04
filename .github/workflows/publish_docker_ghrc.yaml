@@ -59,7 +59,7 @@ jobs:
           platforms: linux/amd64
           labels: ${{ steps.sync-server-meta.outputs.labels }}
           build-args: |
-            TAG=${{ github.event.inputs.version_tag }}
+            ANKI_VERSION=${{ github.event.inputs.version_tag }}
           tags: |
             ${{ env.SYNC_SERVER_IMAGE_NAME }}:latest
             ${{ env.SYNC_SERVER_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
@@ -74,7 +74,7 @@ jobs:
           platforms: linux/amd64
           labels: ${{ steps.desktop-meta.outputs.labels }}
           build-args: |
-            TAG=${{ github.event.inputs.version_tag }}
+            ANKI_VERSION=${{ github.event.inputs.version_tag }}
           tags: |
             ${{ env.DESKTOP_IMAGE_NAME }}:latest
             ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
