@@ -3,7 +3,7 @@ name: Create and publish the anki sync server and desktop images
 on:
   workflow_dispatch:
     inputs:
-      version_tag:
+      anki_version_tag:
         description: "Tag for the Docker image (e.g., '1.0.0', '27.0')"
         required: true
       anki_connect_version_tag:
@@ -69,10 +69,10 @@ jobs:
           platforms: linux/amd64
           labels: ${{ steps.sync-server-meta.outputs.labels }}
           build-args: |
-            ANKI_VERSION=${{ github.event.inputs.version_tag }}
+            ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
           tags: |
             ${{ env.SYNC_SERVER_IMAGE_NAME }}:latest
-            ${{ env.SYNC_SERVER_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
+            ${{ env.SYNC_SERVER_IMAGE_NAME }}:${{ github.event.inputs.anki_version_tag }}
 
       - name: Build and push anki desktop image
         uses: docker/build-push-action@v3
@@ -84,10 +84,10 @@ jobs:
           platforms: linux/amd64
           labels: ${{ steps.desktop-meta.outputs.labels }}
           build-args: |
-            ANKI_VERSION=${{ github.event.inputs.version_tag }}
+            ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
           tags: |
             ${{ env.DESKTOP_IMAGE_NAME }}:latest
-            ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
+            ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.anki_version_tag }}
 
       - name: Build and push anki headless image
         uses: docker/build-push-action@v3
@@ -99,8 +99,9 @@ jobs:
           platforms: linux/amd64
           labels: ${{ steps.headless-meta.outputs.labels }}
           build-args: |
-            ANKI_VERSION=${{ github.event.inputs.version_tag }}
+            ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
             ANKICONNECT_VERSION=${{ github.event.inputs.anki_connect_version_tag }}
           tags: |
             ${{ env.HEADLESS_IMAGE_NAME }}:latest
-            ${{ env.HEADLESS_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
+            ${{ env.HEADLESS_IMAGE_NAME }}:anki-${{ github.event.inputs.anki_version_tag }}
+            ${{ env.HEADLESS_IMAGE_NAME }}:ankiconnect-${{ github.event.inputs.anki_connect_version_tag }}
