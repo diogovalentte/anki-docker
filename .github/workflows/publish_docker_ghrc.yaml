@@ -6,6 +6,9 @@ on:
       version_tag:
         description: "Tag for the Docker image (e.g., '1.0.0', '27.0')"
         required: true
+      anki_connect_version_tag:
+        description: "Tag for the Anki Connect Docker image (e.g., '1.0.0', '27.0')"
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -23,6 +26,7 @@ jobs:
         run: |
           echo "SYNC_SERVER_IMAGE_NAME=${REGISTRY}/${{ github.repository_owner }}/anki-sync-server" >> $GITHUB_ENV
           echo "DESKTOP_IMAGE_NAME=${REGISTRY}/${{ github.repository_owner }}/anki-desktop" >> $GITHUB_ENV
+          echo "HEADLESS_IMAGE_NAME=${REGISTRY}/${{ github.repository_owner }}/anki-headless" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -48,6 +52,12 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DESKTOP_IMAGE_NAME }}
+
+      - name: Extract metadata (tags, labels) for anki headless
+        id: headless-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.HEADLESS_IMAGE_NAME }}
 
       - name: Build and push anki sync server image
         uses: docker/build-push-action@v3
@@ -78,3 +88,19 @@ jobs:
           tags: |
             ${{ env.DESKTOP_IMAGE_NAME }}:latest
             ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}
+
+      - name: Build and push anki headless image
+        uses: docker/build-push-action@v3
+        with:
+          context: headless
+          file: headless/Dockerfile
+          push: true
+          provenance: false
+          platforms: linux/amd64
+          labels: ${{ steps.headless-meta.outputs.labels }}
+          build-args: |
+            ANKI_VERSION=${{ github.event.inputs.version_tag }}
+            ANKICONNECT_VERSION=${{ github.event.inputs.anki_connect_version_tag }}
+          tags: |
+            ${{ env.HEADLESS_IMAGE_NAME }}:latest
+            ${{ env.HEADLESS_IMAGE_NAME }}:${{ github.event.inputs.version_tag }}

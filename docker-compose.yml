@@ -21,3 +21,14 @@ services:
     volumes:
       - ./desktop_data:/config/app/Anki2
     restart: unless-stopped
+
+  anki-headless:
+    container_name: anki-headless
+    image: ghcr.io/diogovalentte/anki-headless:latest
+    # environment:
+    #   - QT_QPA_PLATFORM="vnc" # Can be "offscreen" too
+    ports:
+      - 8765:8765 # AnkiConnect
+    volumes:
+      - ./headless_data:/data
+    restart: unless-stopped
