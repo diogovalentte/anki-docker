@@ -45,6 +45,7 @@ ENV QMLSCENE_DEVICE=softwarecontext
 ENV FONTCONFIG_PATH=/etc/fonts
 ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
 ENV QT_QPA_PLATFORM="vnc"
+ENV ANKICONNECT_API_KEY=
 # Could also use "offscreen"
 
 CMD ["/bin/bash", "startup.sh"]
