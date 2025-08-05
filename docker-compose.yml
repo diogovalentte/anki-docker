@@ -29,7 +29,9 @@ services:
       - QT_QPA_PLATFORM=vnc # Can be "offscreen" too
       - ANKICONNECT_API_KEY=your_api_key_here # Optional, for AnkiConnect. If provided, configure your Yomichan, etc. to use this key.
     ports:
-      - 8765:8765 # AnkiConnect
+      # You can comment out the unprotected port if you want to use only the protected one, and vise versa.
+      - 8765:8765 # Unprotected AnkiConnect
+      - 8766:8766 # Protected AnkiConnect
     volumes:
       - ./headless_data:/data
     restart: unless-stopped

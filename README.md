@@ -40,3 +40,10 @@ docker run -e QT_QPA_PLATFORM="offscreen" ...
 ```
 
 By default, Anki will be launched using `QT_QPA_PLATFORM="vnc"`. This will enable Anki to be accessed using a VNC viewer which might help with debugging, provided port `5900` is forwarded.
+
+> [!INFO]
+> You can set the **optional** `ANKICONNECT_API_KEY` environment variable to a custom value to use with the AnkiConnect plugin. If provided, configure your Yomichan, etc. to use this key.
+>
+> - Take a look at the `docker-compose.yml` file for an example of how to set this variable.
+>
+> If not provided, AnkiConnect will be unprotected and accessible to anyone who can access the plugin.

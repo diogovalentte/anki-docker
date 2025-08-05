@@ -12,9 +12,20 @@ jq '.webCorsOriginList = ["*"] | .webBindAddress = "0.0.0.0"' $ANKICONNECT_CONFI
 mv tmp_file $ANKICONNECT_CONFIG_FILE
 
 if [ -n "$ANKICONNECT_API_KEY" ]; then
-    echo "[i] Setting AnkiConnect API key!"
-    jq --arg key "$ANKICONNECT_API_KEY" '.apiKey = $key' "$ANKICONNECT_CONFIG_FILE" >tmp_file
-    mv tmp_file $ANKICONNECT_CONFIG_FILE
-fi
+    echo "[i] Running protected AnkiConnect with API key!"
+    anki -b $DATA_FOLDER &
+    ANKI_PID=$!
 
-anki -b $DATA_FOLDER
+    sleep 30
+    if ! kill -0 "$ANKI_PID" 2>/dev/null; then
+        echo "[!] Anki not started yet. Not starting proxy server."
+        exit 1
+    fi
+
+    echo "[i] Anki is running, starting proxy server!"
+    exec uvicorn proxy:app --host 0.0.0.0 --port 8766
+    exit 0
+else
+    echo "[i] Running unprotected AnkiConnect!"
+    anki -b $DATA_FOLDER
+fi

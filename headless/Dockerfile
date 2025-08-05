@@ -1,4 +1,5 @@
-FROM debian:12.4-slim
+# FROM debian:12.4-slim
+FROM python:3.11-slim
 
 ARG ANKI_VERSION
 ARG ANKICONNECT_VERSION
@@ -16,6 +17,12 @@ RUN useradd -m anki
 RUN mkdir /app && chown -R anki /app
 WORKDIR /app
 COPY startup.sh .
+COPY proxy.py .
+COPY requirements.txt .
+
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && rm -rf /app/deps/**/*.dist-info/__pycache__ /app/deps/**/*.pyc /root/.cache
 
 RUN wget -O ANKI.tar.zst --no-check-certificate https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-launcher-${ANKI_VERSION}-linux.tar.zst && \
     zstd -d ANKI.tar.zst && rm ANKI.tar.zst && \
