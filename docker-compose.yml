@@ -27,7 +27,7 @@ services:
     image: ghcr.io/diogovalentte/anki-headless:latest
     environment:
       - QT_QPA_PLATFORM=vnc # Can be "offscreen" too
-      - ANKICONNECT_API_KEY=your_api_key_here # Optional, for AnkiConnect. If true, configure your Yomichan, etc. to use this key.
+      - ANKICONNECT_API_KEY=your_api_key_here # Optional, for AnkiConnect. If provided, configure your Yomichan, etc. to use this key.
     ports:
       - 8765:8765 # AnkiConnect
     volumes:
