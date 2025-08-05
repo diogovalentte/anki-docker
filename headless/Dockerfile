@@ -1,7 +1,7 @@
 FROM debian:12.4-slim
 
-ARG ANKICONNECT_VERSION
 ARG ANKI_VERSION
+ARG ANKICONNECT_VERSION
 
 # Innitial setup
 RUN apt update && apt install --no-install-recommends -y \
@@ -44,7 +44,7 @@ USER anki
 ENV QMLSCENE_DEVICE=softwarecontext
 ENV FONTCONFIG_PATH=/etc/fonts
 ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
-ENV QT_QPA_PLATFORM="vnc"
+ENV QT_QPA_PLATFORM=vnc
 ENV ANKICONNECT_API_KEY=
 # Could also use "offscreen"
 
