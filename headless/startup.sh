@@ -16,7 +16,7 @@ if [ -n "$ANKICONNECT_API_KEY" ]; then
     anki -b $DATA_FOLDER &
     ANKI_PID=$!
 
-    sleep 30
+    sleep 5
     if ! kill -0 "$ANKI_PID" 2>/dev/null; then
         echo "[!] Anki not started yet. Not starting proxy server."
         exit 1

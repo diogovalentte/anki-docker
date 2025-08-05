@@ -28,6 +28,7 @@ services:
     environment:
       - QT_QPA_PLATFORM=vnc # Can be "offscreen" too
       - ANKICONNECT_API_KEY=your_api_key_here # Optional, for AnkiConnect. If provided, configure your Yomichan, etc. to use this key.
+      - ANKI_USER_FOLDER=User 1
     ports:
       # You can comment out the unprotected port if you want to use only the protected one, and vise versa.
       - 8765:8765 # Unprotected AnkiConnect
