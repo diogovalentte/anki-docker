@@ -14,7 +14,13 @@ mkdir -p ./sync_server_data && sudo chown 65532:65532 ./headless_data
 - The `ANKI_PASSWORD` should be the hashed password, more about it [here](https://docs.ankiweb.net/sync-server.html#hashed-passwords).
 - Create the environment variables enclosed in single quotes, like this: `SYNC_USER3='username3:hashed_password'`.
 
+> [!NOTE]
+> When a new (*non-pre-release*) version tag is released in the [Anki](https://github.com/ankitects/anki) repository, an automation will be triggered to create a new version of this Docker image, with the tag `latest` and the Anki version, like `25.07.5`.
+
 # Anki Desktop
+
+> [!NOTE]
+> When a new (*non-pre-release*) version tag is released in the [Anki](https://github.com/ankitects/anki) repository, an automation will be triggered to create a new version of this Docker image, with the tag `latest` and the Anki version, like `25.07.5`.
 
 # Anki Headless
 
@@ -37,6 +43,9 @@ mkdir -p ./headless_data && sudo chown 1000:1000 ./headless_data
 > If you do bring your profile, make sure you provide the correct value for the `ANKI_USER_FOLDER` environment variable, as it will be used to determine the location of your Anki profile inside the container.
 >
 > - If you don't provide this variable, it will default to `User 1`, which is the default profile created by Anki and also used in the `headless_data` folder in this repository.
+
+> [!NOTE]
+> When a new (*non-pre-release*) version tag is released in the [Anki](https://github.com/ankitects/anki) or [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect) repositories, an automation will be triggered to create a new version of this Docker image, with the tag `latest` and the Anki and AnkiConnect version, like `anki-25.07.5` and `anki-connect-25.6.12.0`.
 
 ### `ANKICONNECT_API_KEY`
 
