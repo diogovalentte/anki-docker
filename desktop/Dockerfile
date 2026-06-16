@@ -6,10 +6,10 @@ RUN \
   apt-get update && \
   apt-get install -y anki mplayer wget zstd xdg-utils libxcb-xinerama0 libxcb-cursor0 && \
   dpkg --remove anki && \
-  wget https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-launcher-${ANKI_VERSION}-linux.tar.zst && \
-  tar --use-compress-program=unzstd -xvf anki-launcher-${ANKI_VERSION}-linux.tar.zst && \
-  cd anki-launcher-${ANKI_VERSION}-linux && ./install.sh &&  cd .. && \
-  rm -rf anki-launcher-${ANKI_VERSION}-linux anki-launcher-${ANKI_VERSION}-linux.tar.zst && \
+  wget https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
+  tar --use-compress-program=unzstd -xvf anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
+  cd anki-linux && ./install.sh &&  cd .. && \
+  rm -rf anki-linux anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
   apt-get clean && \
   mkdir -p /config/app/Anki2 && \
   mkdir -p /config/app/Anki && \

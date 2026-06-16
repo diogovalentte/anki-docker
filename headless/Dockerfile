@@ -24,13 +24,13 @@ RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt \
     && rm -rf /app/deps/**/*.dist-info/__pycache__ /app/deps/**/*.pyc /root/.cache
 
-RUN wget -O ANKI.tar.zst --no-check-certificate https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-launcher-${ANKI_VERSION}-linux.tar.zst && \
+RUN wget -O ANKI.tar.zst --no-check-certificate https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
     zstd -d ANKI.tar.zst && rm ANKI.tar.zst && \
     tar xfv ANKI.tar && rm ANKI.tar
-WORKDIR /app/anki-launcher-${ANKI_VERSION}-linux
+WORKDIR /app/anki-linux
 
 # Run modified install.sh
-RUN sed -i 's/xdg-mime/# xdg-mime/' install.sh && sh install.sh
+RUN sed -i 's/xdg-mime/# xdg-mime/' install.sh && bash install.sh
 
 # Post process
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
