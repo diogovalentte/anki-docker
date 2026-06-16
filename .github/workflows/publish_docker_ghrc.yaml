@@ -74,37 +74,37 @@ jobs:
             ${{ env.SYNC_SERVER_IMAGE_NAME }}:latest
             ${{ env.SYNC_SERVER_IMAGE_NAME }}:${{ github.event.inputs.anki_version_tag }}
 
-      # - name: Build and push anki desktop image
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: desktop
-      #     file: desktop/Dockerfile
-      #     push: true
-      #     provenance: false
-      #     platforms: linux/amd64
-      #     labels: ${{ steps.desktop-meta.outputs.labels }}
-      #     build-args: |
-      #       ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
-      #     tags: |
-      #       ${{ env.DESKTOP_IMAGE_NAME }}:latest
-      #       ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.anki_version_tag }}
+      - name: Build and push anki desktop image
+        uses: docker/build-push-action@v3
+        with:
+          context: desktop
+          file: desktop/Dockerfile
+          push: true
+          provenance: false
+          platforms: linux/amd64
+          labels: ${{ steps.desktop-meta.outputs.labels }}
+          build-args: |
+            ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
+          tags: |
+            ${{ env.DESKTOP_IMAGE_NAME }}:latest
+            ${{ env.DESKTOP_IMAGE_NAME }}:${{ github.event.inputs.anki_version_tag }}
 
-      # - name: Build and push anki headless image
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: headless
-      #     file: headless/Dockerfile
-      #     push: true
-      #     provenance: false
-      #     platforms: linux/amd64
-      #     labels: ${{ steps.headless-meta.outputs.labels }}
-      #     build-args: |
-      #       ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
-      #       ANKICONNECT_VERSION=${{ github.event.inputs.anki_connect_version_tag }}
-      #     tags: |
-      #       ${{ env.HEADLESS_IMAGE_NAME }}:latest
-      #       ${{ env.HEADLESS_IMAGE_NAME }}:anki-${{ github.event.inputs.anki_version_tag }}
-      #       ${{ env.HEADLESS_IMAGE_NAME }}:ankiconnect-${{ github.event.inputs.anki_connect_version_tag }}
+      - name: Build and push anki headless image
+        uses: docker/build-push-action@v3
+        with:
+          context: headless
+          file: headless/Dockerfile
+          push: true
+          provenance: false
+          platforms: linux/amd64
+          labels: ${{ steps.headless-meta.outputs.labels }}
+          build-args: |
+            ANKI_VERSION=${{ github.event.inputs.anki_version_tag }}
+            ANKICONNECT_VERSION=${{ github.event.inputs.anki_connect_version_tag }}
+          tags: |
+            ${{ env.HEADLESS_IMAGE_NAME }}:latest
+            ${{ env.HEADLESS_IMAGE_NAME }}:anki-${{ github.event.inputs.anki_version_tag }}
+            ${{ env.HEADLESS_IMAGE_NAME }}:ankiconnect-${{ github.event.inputs.anki_connect_version_tag }}
 
       - name: Create payload file
         if: always()
