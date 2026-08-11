@@ -27,6 +27,26 @@ async def sharex_upload(file: UploadFile = File(...), key: str = Header(None)):
     return {"status": "received", "filename": file.filename}
 
 
+def strip_api_key(payload):
+    """Remove the API key from the request and from every nested `multi` action.
+
+    AnkiConnect's `multi` runs each sub-action through `handler()`, which
+    validates the key again. Clients like Yomitan copy the key into every
+    sub-action, so leaving them in place makes AnkiConnect (running with
+    `apiKey: null`) reject each one with "valid api key must be provided".
+    """
+    payload.pop("key", None)
+
+    if payload.get("action") == "multi":
+        actions = (payload.get("params") or {}).get("actions")
+        if isinstance(actions, list):
+            for action in actions:
+                if isinstance(action, dict):
+                    strip_api_key(action)
+
+    return payload
+
+
 @app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def proxy(request: Request, full_path: str):
     try:
@@ -37,7 +57,7 @@ async def proxy(request: Request, full_path: str):
     if json_data.get("key") != VALID_API_KEY:
         raise HTTPException(status_code=403, detail="Forbidden: Invalid API key")
 
-    del json_data["key"]
+    strip_api_key(json_data)
 
     async with httpx.AsyncClient() as client:
         proxy_request = client.build_request(
