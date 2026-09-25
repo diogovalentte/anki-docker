@@ -7,7 +7,8 @@ RUN \
   apt-get install -y anki mplayer wget zstd xdg-utils libxcb-xinerama0 libxcb-cursor0 && \
   dpkg --remove anki && \
   wget https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
-  tar --use-compress-program=unzstd -xvf anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
+  mkdir anki-linux && \
+  tar --use-compress-program=unzstd -xvf anki-${ANKI_VERSION}-linux-x86_64.tar.zst -C anki-linux --strip-components=1 && \
   cd anki-linux && ./install.sh &&  cd .. && \
   rm -rf anki-linux anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
   apt-get clean && \

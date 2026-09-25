@@ -26,7 +26,7 @@ RUN pip install --upgrade pip \
 
 RUN wget -O ANKI.tar.zst --no-check-certificate https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-${ANKI_VERSION}-linux-x86_64.tar.zst && \
     zstd -d ANKI.tar.zst && rm ANKI.tar.zst && \
-    tar xfv ANKI.tar && rm ANKI.tar
+    mkdir anki-linux && tar xfv ANKI.tar -C anki-linux --strip-components=1 && rm ANKI.tar
 WORKDIR /app/anki-linux
 
 # Run modified install.sh
